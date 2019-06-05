@@ -10,7 +10,7 @@
 # should be a corresponding call to simxFinish at the end!
 
 try:
-    from VrepApi import vrep
+    from VrepApi import  vrep
 except:
     print ('--------------------------------------------------------------')
     print ('"vrep.py" could not be imported. This means very probably that')
@@ -24,7 +24,7 @@ import time
 
 print ('Program started')
 vrep.simxFinish(-1) # just in case, close all opened connections
-clientID=vrep.simxStart('192.168.15.18',19997,True,True,5000,5) # Connect to V-REP
+clientID=vrep.simxStart('192.168.15.29',19997,True,True,5000,5) # Connect to V-REP
 if clientID!=-1:
     print ('Connected to remote API server')
 
