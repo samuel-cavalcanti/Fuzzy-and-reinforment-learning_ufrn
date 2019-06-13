@@ -2,8 +2,7 @@ from VrepApi import vrep
 from .PioneerRobot import PioneerRobot
 import numpy as np
 import time
-from pynput.keyboard import Key, Listener
-from pynput import keyboard
+from pynput.keyboard import Listener
 
 
 class VrepPioneer(PioneerRobot):
@@ -11,9 +10,13 @@ class VrepPioneer(PioneerRobot):
     __sensor_values = - np.ones(16)
     __left_motor_id = -1
     __right_motor_id = -1
+    __body = -1
+    __data = list()
 
     def __init__(self, server_ip: str, server_port: int):
         self.__client_id = vrep.simxStart(server_ip, server_port, True, True, 5000, 5)
+        self.__server_ip = server_ip
+        self.__server_port = server_port
 
         self._connect_all_peaces()
 
@@ -26,6 +29,9 @@ class VrepPioneer(PioneerRobot):
 
         self.__left_motor_id = self._connect_peace("Pioneer_p3dx_leftMotor")
         self.__right_motor_id = self._connect_peace("Pioneer_p3dx_rightMotor")
+        self.__body = self._connect_peace("Pioneer_p3dx_visible")
+        self.__wall = self._connect_peace("Parede")
+        self.__collision = self._get_collision()
 
     def _connect_peace(self, vrep_name: str) -> int:
 
@@ -43,13 +49,18 @@ class VrepPioneer(PioneerRobot):
         vrep.simxReadProximitySensor(self.__client_id, sensor_id, vrep.simx_opmode_streaming)
 
         status, detection_state, values, doh, dsnv = vrep.simxReadProximitySensor(self.__client_id, sensor_id,
-                                                                                  vrep.simx_opmode_buffer)
-        while status == vrep.simx_return_novalue_flag:
+                                                                                  vrep.simx_opmode_oneshot)
+        while status == vrep.simx_return_novalue_flag and self.is_connected():
             status, detection_state, values, doh, dsnv = vrep.simxReadProximitySensor(self.__client_id, sensor_id,
                                                                                       vrep.simx_opmode_buffer)
 
         if status == vrep.simx_return_ok:
-            return values[2]
+
+            if detection_state:
+                return values[2]
+
+            else:
+                return 1
         else:
             return -1.0
 
@@ -69,6 +80,7 @@ class VrepPioneer(PioneerRobot):
         self._set_velocity_motor(0, 0)
 
     def _set_velocity_motor(self, left_motor_velocity, right_motor_velocity):
+
         status_left = vrep.simxSetJointTargetVelocity(self.__client_id, self.__right_motor_id, left_motor_velocity,
                                                       vrep.simx_opmode_streaming)
 
@@ -77,47 +89,76 @@ class VrepPioneer(PioneerRobot):
 
         while status_left == vrep.simx_return_novalue_flag or status_right == vrep.simx_return_novalue_flag:
             status_left = vrep.simxSetJointTargetVelocity(self.__client_id, self.__right_motor_id, left_motor_velocity,
-                                                          vrep.simx_opmode_streaming)
+                                                          vrep.simx_opmode_buffer)
 
             status_right = vrep.simxSetJointTargetVelocity(self.__client_id, self.__left_motor_id, right_motor_velocity,
-                                                           vrep.simx_opmode_streaming)
+                                                           vrep.simx_opmode_buffer)
 
-    def _on_press(self, key):
+            if self.is_connected() is False:
+                break
 
-        velocity = 0.3
-        reduce = 0.3
-        key_value = str(key)[1]
+    def random_move(self) -> int:
+        sensors = self.get_ultrasonic_sensor_values()
 
-        if key_value == "w":
-            self.set_velocity_motor(velocity, velocity)
+        if np.sum(sensors[0:6]) == 6:
+            return 0
 
-        elif key_value == "s":
-            self.set_velocity_motor(-velocity, -velocity)
+        return np.random.randint(0, 1)
 
-        elif key_value == "a":
-            self.set_velocity_motor(velocity * reduce, -velocity * reduce)
+    def is_connected(self) -> bool:
+        return vrep.simxGetConnectionId(self.__client_id) != -1
 
-        elif key_value == "d":
-            self.set_velocity_motor(-velocity * reduce, velocity * reduce)
+    def reset_connection(self) -> None:
 
-    def control_the_robot(self):
-        print("start Controller")
-        listener = Listener(on_press=self._on_press)
-        listener.start()
+        self.close_connection()
 
-        # with Listener(on_press=self._on_paress) as listener:
-        #     listener.run()
+        client_id = vrep.simxStart(self.__server_ip, 19997, True, True, 5000, 5)
 
-        dataset = list()
+        print("resetting simulation")
 
-        while vrep.simxGetConnectionId(self.__client_id) != -1:
-            value_sensors = self.get_ultrasonic_sensor_values()
-            dataset.append(value_sensors)
-            time.sleep(0.5)
-            pass
+        vrep.simxStopSimulation(client_id, vrep.simx_opmode_blocking)
 
-        print("Saving Dataset")
-        np.savetxt("dataset.csv", np.array(dataset), delimiter=",")
+        time.sleep(5)
 
-        listener.stop()
-        listener.join()
+        vrep.simxStartSimulation(client_id, vrep.simx_opmode_blocking)
+
+        time.sleep(2)
+
+        vrep.simxFinish(client_id)
+
+        print("simulation started")
+
+        self.conect_to_robot()
+
+        self._connect_all_peaces()
+
+    def conect_to_robot(self) -> bool:
+        self.__client_id = vrep.simxStart(self.__server_ip, self.__server_port, True, True, 5000, 5)
+
+        return self.__client_id != -1
+
+    def close_connection(self):
+        vrep.simxFinish(self.__client_id)
+
+    def _get_collision(self) -> bool:
+        status, colision = vrep.simxGetCollisionHandle(self.__client_id, "robot",
+                                                       vrep.simx_opmode_blocking)
+
+        while status == vrep.simx_return_novalue_flag:
+            status, colision = vrep.simxGetCollisionHandle(self.__client_id, "robot",
+                                                           vrep.simx_opmode_blocking)
+
+        return colision
+
+    def collision(self) -> bool:
+
+        status, collision_status = vrep.simxReadCollision(self.__client_id, self.__collision,
+                                                          vrep.simx_opmode_streaming)
+
+        print("status", status, "collision_status", collision_status)
+
+        while status == vrep.simx_return_novalue_flag:
+            status, collision_status = vrep.simxReadCollision(self.__client_id, self.__collision,
+                                                              vrep.simx_opmode_streaming)
+
+        return collision_status

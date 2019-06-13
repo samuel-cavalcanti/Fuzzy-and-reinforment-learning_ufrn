@@ -2,6 +2,8 @@ import numpy as np
 
 
 class Q_learning:
+    _current_state = None
+    _current_action = None
 
     def __init__(self, max_num_states, max_num_actions, random_func, alpha=0.1, gamma=0.4, epsilon=1, epsilon_min=0.01,
                  epsilon_decay=0.995, n_resets=0):

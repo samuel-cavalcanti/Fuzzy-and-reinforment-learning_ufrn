@@ -13,7 +13,7 @@ class DeepQLearning(Q_learning):
     # _epsilon_min = 0.01
     # _epsilon_decay = 0.995
 
-    def __init__(self, model, random_func, batch_size=64, size_memory=100000, alpha=0.1, gamma=0.99,
+    def __init__(self, model, random_func, batch_size=64, size_memory=1000, alpha=0.1, gamma=0.99,
                  epsilon=1, epsilon_min=0.01, epsilon_decay=0.995, n_resets=0):
 
         self._model = model
@@ -57,10 +57,13 @@ class DeepQLearning(Q_learning):
 
     # https://web.stanford.edu/class/psych209/Readings/MnihEtAlHassibis15NatureControlDeepRL.pdf
     def _replay(self):
-        mini_batch = random.sample(self._memory, self._batch_size)
 
-        for current_state, action, reward, next_state, done in mini_batch:
-            self._fitModel(current_state, action, reward, next_state, done)
+        x, y = self._make_batch(random.sample(self._memory, self._batch_size))
+
+        self._model.fit(x, y, verbose=1, epochs=1)
+
+        # for current_state, action, reward, next_state, done in mini_batch:
+        #     self._fitModel(current_state, action, reward, next_state, done)
 
     def _fitModel(self, current_state, action, reward, next_state, done):
         if not done:
@@ -69,6 +72,7 @@ class DeepQLearning(Q_learning):
             new_value = reward
 
         nodes = self._model.predict(current_state)
+
         nodes[0][action] = new_value
 
         self._model.fit(current_state, nodes, epochs=1, verbose=0)
@@ -80,3 +84,27 @@ class DeepQLearning(Q_learning):
 
     def save(self, file):
         self._model.save(file)
+
+    def _make_batch(self, mini_batch) -> (np.array, np.array):
+
+        y = list()
+
+        x = list()
+
+        for current_state, action, reward, next_state, done in mini_batch:
+            if not done:
+                new_value = reward + self._gamma * np.amax(self._model.predict(next_state))
+            else:
+                new_value = reward
+
+            nodes = self._model.predict(current_state)
+
+            nodes[0][action] = new_value
+
+            y.append(nodes.reshape(nodes.size))
+            x.append(current_state.reshape(current_state.size))
+
+        y = np.array(y)
+
+        x = np.array(x)
+        return x, y
