@@ -1,4 +1,4 @@
-from model.DeepQLearning import DeepQLearning
+from Model.DeepQLearning import DeepQLearning
 from PioneerRobot.PioneerRobot import PioneerRobot
 from reward_function import RewardFunction
 import numpy as np
@@ -62,7 +62,8 @@ class Agent:
         episodes = 0
         done = False
 
-        self.__model.load(file)
+        if file != "None":
+            self.__model.load(file)
 
         self.__model._epsilon = 0.01
 
@@ -95,7 +96,7 @@ class Agent:
             done = False
 
         print("saving model")
-        self.__model.save(file)
+        # self.__model.save(file)
 
     def control_agent(self):
 

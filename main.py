@@ -1,8 +1,5 @@
 from PioneerRobot.VrepPioneer import VrepPioneer
-import numpy as np
-from matplotlib import pyplot as plt
-from matplotlib.ticker import MaxNLocator
-from model.DeepQLearning import DeepQLearning
+from Model.DeepQLearning import DeepQLearning
 import keras
 from Agent import Agent
 from reward_function import RewardFunction
@@ -57,8 +54,8 @@ if __name__ == '__main__':
 
     # agent.control_agent()
 
-    model_file = "robot2"
+    model_file = "Weights/robot1"
 
-    # agent.learn_by_demonstration("dataset.csv", model_file)
+    # agent.learn_by_demonstration("Dataset/dataset.csv", model_file)
 
     agent.learn(model_file)
