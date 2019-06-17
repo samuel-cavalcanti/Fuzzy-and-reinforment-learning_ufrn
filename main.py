@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     # agent.control_agent()
 
-    model_file = "Weights/robot1"
+    model_file = "Weights/robot"
 
     # agent.learn_by_demonstration("Dataset/dataset.csv", model_file)
 

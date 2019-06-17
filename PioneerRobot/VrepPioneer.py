@@ -2,7 +2,6 @@ from VrepApi import vrep
 from .PioneerRobot import PioneerRobot
 import numpy as np
 import time
-from pynput.keyboard import Listener
 
 
 class VrepPioneer(PioneerRobot):

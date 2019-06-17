@@ -1,0 +1,73 @@
+\providecommand{\abntreprintinfo}[1]{%
+ \citeonline{#1}}
+\setlength{\labelsep}{0pt}\begin{thebibliography}{}
+\providecommand{\abntrefinfo}[3]{}
+\providecommand{\abntbstabout}[1]{}
+\abntbstabout{v-1.9.7 }
+
+\bibitem[Argall et al. 2009]{argall2009survey}
+\abntrefinfo{Argall et al.}{ARGALL et al.}{2009}
+{ARGALL, B.~D. et al. A survey of robot learning from demonstration.
+\emph{Robotics and autonomous systems}, Elsevier, v.~57, n.~5, p. 469--483,
+  2009.}
+
+\bibitem[Duan et al. 2005]{duan2005fuzzy}
+\abntrefinfo{Duan et al.}{DUAN et al.}{2005}
+{DUAN, Y. et al. Fuzzy reinforcement learning and its application in robot
+  navigation. In:  IEEE. \emph{2005 International Conference on Machine
+  Learning and Cybernetics}. [S.l.], 2005. v.~2, p. 899--904.}
+
+\bibitem[Ekvall e Kragic 2008]{ekvall2008robot}
+\abntrefinfo{Ekvall e Kragic}{EKVALL; KRAGIC}{2008}
+{EKVALL, S.; KRAGIC, D. Robot learning from demonstration: a task-level
+  planning approach.
+\emph{International Journal of Advanced Robotic Systems}, SAGE Publications
+  Sage UK: London, England, v.~5, n.~3, p.~33, 2008.}
+
+\bibitem[Hasselt, Guez e Silver 2016]{van2016deep}
+\abntrefinfo{Hasselt, Guez e Silver}{HASSELT; GUEZ; SILVER}{2016}
+{HASSELT, H. V.; GUEZ, A.; SILVER, D. Deep reinforcement learning with double
+  q-learning. In:  \emph{Thirtieth AAAI Conference on Artificial Intelligence}.
+  [S.l.: s.n.], 2016.}
+
+\bibitem[Mamdani, Procyk e Baaklini 1976]{mamdani1976application}
+\abntrefinfo{Mamdani, Procyk e Baaklini}{MAMDANI; PROCYK; BAAKLINI}{1976}
+{MAMDANI, E.; PROCYK, T.; BAAKLINI, N. Application of fuzzy logic to controller
+  design based on linguistic protocol.
+\emph{Discrete Systems and Fuzzy Reasoning}, London, UK: Queen Mary College,
+  University of London, p. 125--149, 1976.}
+
+\bibitem[Mamdani 1976]{mamdani1976advances}
+\abntrefinfo{Mamdani}{MAMDANI}{1976}
+{MAMDANI, E.~H. Advances in the linguistic synthesis of fuzzy controllers.
+\emph{International Journal of Man-Machine Studies}, Elsevier, v.~8, n.~6, p.
+  669--678, 1976.}
+
+\bibitem[Mnih et al. 2015]{mnih2015human}
+\abntrefinfo{Mnih et al.}{MNIH et al.}{2015}
+{MNIH, V. et al. Human-level control through deep reinforcement learning.
+\emph{Nature}, Nature Publishing Group, v.~518, n.~7540, p.~529, 2015.}
+
+\bibitem[Motta 2016]{motta2016aprendizagem}
+\abntrefinfo{Motta}{MOTTA}{2016}
+{MOTTA, B. d.~C. Aprendizagem por demonstra{\c{c}}{\~a}o baseada em redes
+  neurais artificiais aplicada {\`a} rob{\'o}tica m{\'o}vel.
+2016.}
+
+\bibitem[Sandri e Correa 1999]{sandri1999logica}
+\abntrefinfo{Sandri e Correa}{SANDRI; CORREA}{1999}
+{SANDRI, S.; CORREA, C. L{\'o}gica nebulosa.
+\emph{Instituto Tecnol{\'o}gico da Aeron{\'a}utica--ITA, V Escola de Redes
+  Neurais, pp. C073-c090, S{\~a}o Jos{\'e} dos Campos}, 1999.}
+
+\bibitem[Sutton e Barto 2018]{sutton2018reinforcement}
+\abntrefinfo{Sutton e Barto}{SUTTON; BARTO}{2018}
+{SUTTON, R.~S.; BARTO, A.~G. \emph{Reinforcement learning: An introduction}.
+  [S.l.]: MIT press, 2018.}
+
+\bibitem[Zhang]{zhangreinforcement}
+\abntrefinfo{Zhang}{ZHANG}{}
+{ZHANG, C. Reinforcement learning for robot obstacle avoidance and wall
+  following.}
+
+\end{thebibliography}

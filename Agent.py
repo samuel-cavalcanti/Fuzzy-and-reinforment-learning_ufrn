@@ -96,7 +96,7 @@ class Agent:
             done = False
 
         print("saving model")
-        # self.__model.save(file)
+        self.__model.save(file)
 
     def control_agent(self):
 
